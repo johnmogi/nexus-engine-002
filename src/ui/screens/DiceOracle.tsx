@@ -6,7 +6,7 @@ import { matchup, randomEventType } from "../../generators/oracle";
 import { useSession } from "../session";
 
 export function DiceOracle() {
-  const { seed } = useSession();
+  const { seed, addEntry } = useSession();
   const [notation, setNotation] = useState("2d6+1");
   const [salt, setSalt] = useState(0);
   const [left, setLeft] = useState<ElementName>("fire");
@@ -38,7 +38,16 @@ export function DiceOracle() {
           Notation
           <input value={notation} onChange={(event) => { setNotation(event.target.value); setError(""); }} />
         </label>
-        <button onClick={() => setSalt((value) => value + 1)}>Roll</button>
+        <button onClick={() => {
+          const next = salt + 1;
+          setSalt(next);
+          try {
+            const rolled = rollDice(notation, `${seed}:${next}`);
+            addEntry({ seed, kind: "dice", title: rolled.notation, text: `${rolled.notation} → ${rolled.rolls.join(", ")} = ${rolled.total}` });
+          } catch (cause) {
+            setError(cause instanceof Error ? cause.message : "Bad notation");
+          }
+        }}>Roll</button>
         <p>{error || notationResult}</p>
       </section>
       <section className="panel grid">

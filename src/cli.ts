@@ -2,6 +2,7 @@ declare const process: { argv: string[]; exit: (code: number) => never };
 
 import type { Context } from "./core/types.js";
 import { CONTEXTS } from "./core/types.js";
+import { formatCharacter, generateCharacter } from "./generators/character.js";
 import { formatThing, generateThing } from "./generators/interpret.js";
 import { formatMap, generateMap } from "./generators/map.js";
 import type { GridSize } from "./core/types.js";
@@ -16,11 +17,14 @@ const [command, ...args] = process.argv.slice(2);
 if (command === "generate") {
   const seed = option(args, "--seed", "42");
   const context = option(args, "--context", "room");
-  if (!CONTEXTS.includes(context as Context)) {
-    console.error(`Unknown context ${context}. Use ${CONTEXTS.join(", ")}.`);
+  if (context === "character") {
+    console.log(formatCharacter(generateCharacter(seed)));
+  } else if (!CONTEXTS.includes(context as Context)) {
+    console.error(`Unknown context ${context}. Use ${CONTEXTS.join(", ")}, character.`);
     process.exit(1);
+  } else {
+    console.log(formatThing(generateThing({ seed, context: context as Context })));
   }
-  console.log(formatThing(generateThing({ seed, context: context as Context })));
 } else if (command === "map") {
   const seed = option(args, "--seed", "42");
   const size = Number(option(args, "--size", "4"));

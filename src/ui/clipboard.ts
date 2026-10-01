@@ -1,5 +1,17 @@
 export async function copyText(text: string): Promise<void> {
-  await navigator.clipboard.writeText(text);
+  try {
+    await navigator.clipboard.writeText(text);
+    return;
+  } catch {
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "");
+    document.body.appendChild(area);
+    area.select();
+    const copied = document.execCommand("copy");
+    area.remove();
+    if (!copied) throw new Error("Copy blocked");
+  }
 }
 
 export function downloadText(filename: string, text: string): void {

@@ -1,372 +1,48 @@
-NEXUS ENGINE 002 — ADMIN CORE HARDENING PASS
-
-Canonical repo:
-https://github.com/johnmogi/nexus-engine-002
-
-Local project:
-C:\nexus-dm-poker-tool
-
-Important:
-The canonical repo is nexus-engine-002, not nexus-engine-001.
-Make sure local origin points to nexus-engine-002 or push/migrate there as needed.
-
-Goal:
-Harden Nexus DM Poker Tool 0.0.1 into a proper admin core generator foundation.
-
-This is still not a full player game.
-This is an admin/DM utility engine with UI, data lists, tests, logs, stats, and sample generations.
-
-Expected deliverables:
-1. Proper README
-2. Tests
-3. Structured JSON/data lists
-4. Card/room/monster/character generators
-5. Sample generations
-6. Working admin UI for generation
-7. Stats
-8. Logs/export
-
-Do not add:
-- full combat screen
-- player campaign mode
-- Prophecy/Eclipse
-- hidden identities
-- trading
-- lore editor
-- database/Prisma
-- authentication
-- multiplayer
-
-============================================================
-REPO / README
-============================================================
-
-README should clearly explain:
-
-- What the project is:
-  Nexus DM Poker Tool, powered internally by card-maze-core.
-
-- Purpose:
-  A Dungeon Master utility that uses elemental poker cards to generate rooms, monsters, traps, loot, NPC prompts, simple maps, dice rolls, and logs.
-
-- Canonical repo:
-  nexus-engine-002
-
-- Scope of 0.0.1 / current version:
-  Admin generator tool, not full game.
-
-- How to run:
-  npm install
-  npm run dev
-  npm test
-  npm run check
-  npm run build
-
-- Core card grammar:
-  A-9 x Air/Fire/Water/Earth, no 10s, four inert Joker slots.
-
-- Screens:
-  Dashboard
-  Quick Room
-  Map
-  Codex
-  Dice
-  Session Log
-
-- Data files:
-  where monsters, rooms, characters, loot, traps, and card grammar live.
-
-- Parking lot:
-  player mode, combat, Prophecy, hidden identities, lore editor, database, etc.
-
-============================================================
-DATA LISTS
-============================================================
-
-Create or improve structured data files.
-
-Prefer JSON or TypeScript data modules, but keep them clean and portable.
-
-Required data categories:
-
-1. cards
-- ranks A-9
-- elements Air/Fire/Water/Earth
-- no 10s
-- jokers reserved/inert
-- element grammar
-- rank grammar
-
-2. rooms
-- Dungeo room templates
-- keyed by element and/or tags
-- include title fragments, sensory details, room types
-
-3. monsters
-- Dungeo monster families:
-  - insects
-  - dwarves
-  - food creatures
-- monsters should have:
-  - name
-  - family
-  - element affinity
-  - difficulty band
-  - short description
-  - possible loot hint
-
-4. traps/barriers
-- name
-- element
-- difficulty
-- effect text
-- disarm/avoid prompt
-
-5. loot
-- name
-- type
-- element
-- rarity/intensity
-- short use/hint
-
-6. characters/heroes
-- sample hero list:
-  - Kitchen Mage
-  - Pantry Ranger
-  - Cuisine Warrior
-  - Taste Tester
-- include:
-  - name/title
-  - class
-  - short description
-  - starting stats or simple stat hints
-  - starting item
-
-7. NPC/clue/twist prompts
-- small list of DM-useful prompts
-- keyed by element or context if easy
-
-============================================================
-GENERATORS
-============================================================
-
-Generators should be deterministic by seed.
-
-Required generators:
-- generateCard
-- generateRoom
-- generateMonster
-- generateTrap
-- generateLoot
-- generateCharacter
-- generateNPCPrompt or generateClue
-- generateMap
-- rollDice
-
-Each generation should return structured data:
-- id
-- seed
-- card if applicable
-- title
-- description
-- tags
-- difficulty/intensity if applicable
-- source tables used if useful
-- log text
-
-Sample output should be copyable and exportable.
-
-============================================================
-SAMPLE GENERATIONS
-============================================================
-
-Add sample generations to docs or `samples/`.
-
-Include:
-- seed 42 quick room
-- seed 42 monster
-- seed 42 trap
-- seed 42 loot
-- seed 42 character
-- seed 42 4x4 map
-- one exported session log example
-
-These can be markdown or JSON.
-
-============================================================
-ADMIN UI
-============================================================
-
-The admin UI should support all generator categories.
-
-Screens/panels:
-
-1. Dashboard
-- seed
-- theme
-- quick buttons:
-  - room
-  - monster
-  - trap
-  - loot
-  - character
-  - map
-  - dice
-- recent generations
-- session summary
-
-2. Generator / Quick Room
-Either keep Quick Room but expand context selector, or create a Generator screen.
-
-Must support:
-- room
-- monster
-- trap
-- loot
-- character
-- NPC/clue
-- card-only draw
-
-3. Map
-- grid size 3x3, 4x4, 5x5
-- generate map
-- reveal room
-- show start and finish
-- show guaranteed path in admin mode
-- click room to inspect generated card/room
-
-4. Codex
-- Cards
-- Elements
-- Ranks
-- Monsters
-- Rooms
-- Traps
-- Loot
-- Characters
-- Parking/future hooks
-
-5. Dice / Oracle
-- dice notation
-- standard dice buttons
-- elemental matchup helper
-- random event type if implemented
-
-6. Session Log
-- all generated outputs
-- copy log
-- export JSON
-- clear log
-
-============================================================
-STATS
-============================================================
-
-Add simple admin stats.
-
-Stats should include:
-- total generations this session
-- counts by generator type
-- cards drawn by element
-- cards drawn by rank
-- map size/path length
-- room event distribution
-- monster family distribution
-- average difficulty/intensity if applicable
-
-No deep balance lab yet.
-Just enough to see generator shape.
-
-============================================================
-TESTS
-============================================================
-
-Add/ensure tests for:
-
-Card data:
-- A-9 x 4 elements
-- no 10s
-- jokers inert/reserved
-
-Determinism:
-- same seed + same generator returns same output
-
-Generators:
-- room generator returns title/description/card
-- monster generator returns family/element/difficulty
-- trap generator returns difficulty/effect text
-- loot generator returns item/type
-- character generator returns class/stats or stat hints
-- map generator has start/finish/path/cards
-
-Logs:
-- log records generated outputs
-- export text works
-- export JSON works
-
-Stats:
-- stats count generator types
-- stats count cards by element/rank
-
-Build:
-- npm test
-- npm run check
-- npm run build
-
-============================================================
-DOCUMENTATION FILES
-============================================================
-
-Add docs:
-- docs/MVP_LOCK.md
-- docs/DATA_SHAPE.md
-- docs/GENERATOR_EXAMPLES.md
-- docs/PARKING_LOT.md
-
-MVP_LOCK should state:
-This is the admin core generator, not the player game.
-
-PARKING_LOT should include:
-- Dangio playable game loop
-- combat screen
-- advanced stories
-- custom lore editor
-- database
-- Prophecy/Eclipse
-- Scroll Maze
-- Hidden Garden
-- Sugar Bound
-- Lab chaos mode
-
-============================================================
-VERIFICATION
-============================================================
-
-Run:
-- npm test
-- npm run check
-- npm run build
-
-Also manually verify UI:
-- generate room
-- generate monster
-- generate trap
-- generate loot
-- generate character
-- generate map
-- reveal map room
-- roll dice
-- view codex
-- copy/export log
-- view stats
-
-Report:
-- canonical repo confirmation
-- files changed
-- tests/check/build output
-- sample outputs for seed 42
-- UI screens verified
-- commit hash
-
-Commit message:
-feat: harden admin generator core
+# Nexus DM Poker Tool
+
+Nexus DM Poker Tool is a dungeon-master utility. A party enters a room. The tool draws an elemental poker card and turns it into a room, monster, trap, treasure, character, NPC, clue, or small map. The same seed gives the same result.
+
+The engine inside this repo is `card-maze-core`. This version is an admin generator core, not a player game.
+
+Canonical repo: [nexus-engine-002](https://github.com/johnmogi/nexus-engine-002).
+
+## Run
+
+```bash
+npm install
+npm run dev
+npm test
+npm run check
+npm run build
+```
+
+Optional CLI:
+
+```bash
+npm run generate -- --seed 42 --context room
+npm run generate -- --seed 42 --context character
+npm run map -- --seed 42 --size 4
+```
+
+## Card grammar
+
+Ranks Ace through 9. Elements Air, Fire, Water, and Earth. No tens. Four joker slots exist and stay inert.
+
+A card is a seed for a context. `7 Earth` as a room is not `7 Earth` as a monster.
+
+Data lists live in `src/themes/dungeo/data.ts` and `src/themes/dungeo/characters.ts`.
+
+## Screens
+
+- Dashboard: seed, theme, quick generators, session stats
+- Generator: room, monster, trap, loot, character, NPC, clue, twist, or card
+- Map: 3×3, 4×4, or 5×5, with start, finish, path, and a card in every room
+- Codex: elements, ranks, families, and the Dungeo lists
+- Dice: standard dice, notation such as `2d6+1`, and an element matchup
+- Session log: copy, export JSON, clear
+
+## Scope
+
+Dungeo is the first theme: sugar, insects, dwarves, and food creatures. Hero classes are Kitchen Mage, Pantry Ranger, Cuisine Warrior, and Taste Tester.
+
+What is not built yet is listed in [docs/PARKING_LOT.md](docs/PARKING_LOT.md). The lock for this pass is [docs/MVP_LOCK.md](docs/MVP_LOCK.md).

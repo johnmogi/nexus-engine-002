@@ -37,6 +37,32 @@ export interface GeneratedThing {
   rewardHint: string;
   dmChoice: string;
   family: FamilyId;
+  text: string;
+  sources: string[];
+}
+
+export interface CharacterStats {
+  hp: number;
+  hunger: number;
+  sweetTooth: number;
+  attack: number;
+  defense: number;
+}
+
+export interface GeneratedCharacter {
+  id: string;
+  seed: string;
+  card: Card;
+  context: "character";
+  title: string;
+  className: string;
+  description: string;
+  tags: string[];
+  difficulty: number;
+  stats: CharacterStats;
+  startingItem: string;
+  text: string;
+  sources: string[];
 }
 
 export interface LogEntry {
@@ -46,4 +72,10 @@ export interface LogEntry {
   title: string;
   text: string;
   createdAt: string;
+  element?: string;
+  rank?: number;
+  family?: string;
+  difficulty?: number;
+  mapSize?: number;
+  pathLength?: number;
 }

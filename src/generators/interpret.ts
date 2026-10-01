@@ -26,7 +26,7 @@ export function generateThing(input: { seed: string; context: Context; card?: Ca
     element: card.element,
     difficulty: rank.danger,
   });
-  return {
+  const thing: GeneratedThing = {
     id: `${input.seed}:${card.id}:${input.context}`,
     seed: input.seed,
     card,
@@ -38,7 +38,11 @@ export function generateThing(input: { seed: string; context: Context; card?: Ca
     rewardHint: `${reward} — ${rank.reward}.`,
     dmChoice: DM_CHOICES[input.context],
     family: family.id,
+    text: "",
+    sources: ["dungeo.elements", "dungeo.ranks", `dungeo.${input.context}`],
   };
+  thing.text = formatThing(thing);
+  return thing;
 }
 
 function tagsFor(context: Context, meaning: (typeof ELEMENT_MEANING)["air"]): string[] {

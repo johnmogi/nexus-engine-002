@@ -45,7 +45,7 @@ export function MapScreen() {
             <input type="checkbox" checked={showPath} onChange={(event) => setShowPath(event.target.checked)} />
           </label>
           <button className="quiet" onClick={() => { void copyText(formatMap(active)); }}>Copy summary</button>
-          <button className="quiet" onClick={() => addEntry({ seed, kind: "map", title: `${size}x${size} map`, text: formatMap(active) })}>Add to log</button>
+          <button className="quiet" onClick={() => addEntry({ seed, kind: "map", title: `${size}x${size} map`, text: formatMap(active), mapSize: size, pathLength: active.path.length })}>Add to log</button>
         </div>
         <p className="note">Start is the top-left room. Finish is the bottom-right. Path length {active.path.length}. Side rooms stay on the grid. A click flips only that room.</p>
         <div className="map-grid" style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}>
@@ -65,7 +65,7 @@ export function MapScreen() {
         <section className="panel">
           <h2>{detail.title}</h2>
           <p className="copy-block">{formatThing(detail)}{cell.role === "start" ? "\nEntry." : cell.role === "finish" ? "\nThe way out is here." : ""}</p>
-          <button onClick={() => addEntry({ seed, kind: detail.context, title: detail.title, text: formatThing(detail) })}>Add room to log</button>
+          <button onClick={() => addEntry({ seed, kind: detail.context, title: detail.title, text: detail.text, element: detail.card.element, rank: detail.card.rank, family: detail.family, difficulty: detail.difficulty })}>Add room to log</button>
         </section>
       )}
     </div>

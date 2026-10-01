@@ -9,6 +9,9 @@ interface SessionValue {
   setSeed: (seed: string) => void;
   log: LogEntry[];
   addEntry: (entry: Omit<LogEntry, "id" | "createdAt">) => void;
+  clearLog: () => void;
+  focusKind: string;
+  setFocusKind: (kind: string) => void;
   screen: ScreenId;
   setScreen: (screen: ScreenId) => void;
 }
@@ -32,6 +35,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [seed, setSeed] = useState(initial.seed);
   const [log, setLog] = useState<LogEntry[]>(initial.log);
   const [screen, setScreen] = useState<ScreenId>("dashboard");
+  const [focusKind, setFocusKind] = useState("room");
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ seed, log }));
@@ -44,6 +48,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     addEntry(entry) {
       setLog((current) => addLogEntry(current, { ...entry, createdAt: new Date().toISOString() }));
     },
+    clearLog() {
+      setLog([]);
+    },
+    focusKind,
+    setFocusKind,
     screen,
     setScreen,
   };

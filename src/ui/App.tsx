@@ -8,7 +8,7 @@ import { SessionLog } from "./screens/SessionLog";
 
 const SCREENS: { id: ScreenId; label: string }[] = [
   { id: "dashboard", label: "Dashboard" },
-  { id: "room", label: "Quick room" },
+  { id: "room", label: "Generator" },
   { id: "map", label: "Map" },
   { id: "codex", label: "Codex" },
   { id: "dice", label: "Dice" },

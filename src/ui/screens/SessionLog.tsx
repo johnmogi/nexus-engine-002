@@ -4,7 +4,7 @@ import { copyText, downloadText } from "../clipboard";
 import { useSession } from "../session";
 
 export function SessionLog() {
-  const { log } = useSession();
+  const { log, clearLog } = useSession();
   const [copied, setCopied] = useState(false);
   const text = exportLogText(log);
   const json = exportLogJson(log);
@@ -13,9 +13,10 @@ export function SessionLog() {
     <section className="panel grid">
       <h2>Session log</h2>
       <div className="actions">
-        <button onClick={() => { void copyText(text).then(() => setCopied(true)); }}>{copied ? "Copied" : "Copy logs"}</button>
+        <button onClick={() => { void copyText(text).then(() => setCopied(true)).catch(() => setCopied(false)); }}>{copied ? "Copied" : "Copy logs"}</button>
         <button className="quiet" onClick={() => downloadText("session-log.txt", text)}>Export text</button>
         <button className="quiet" onClick={() => downloadText("session-log.json", json)}>Export JSON</button>
+        <button className="quiet" onClick={clearLog}>Clear log</button>
       </div>
       {!log.length && <p className="note">Nothing recorded yet. Generate a room or a map, then add it.</p>}
       <ul className="list">

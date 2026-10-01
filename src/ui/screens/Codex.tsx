@@ -1,4 +1,5 @@
-import { ELEMENT_MEANING, FAMILIES, HERO_CLASSES, OBJECTIVES, RANK_MEANING, SAMPLE_STATS } from "../../themes/dungeo/data";
+import { ELEMENT_MEANING, FAMILIES, OBJECTIVES, RANK_MEANING, SAMPLE_STATS } from "../../themes/dungeo/data";
+import { CHARACTERS } from "../../themes/dungeo/characters";
 import { ELEMENTS, RANKS } from "../../core/types";
 
 export function Codex() {
@@ -37,10 +38,12 @@ export function Codex() {
         </article>
         <article className="panel">
           <h2>Sample tables</h2>
-          <p><strong>Monsters.</strong> Crumb moth, chili ant, glaze slug, dough warden.</p>
-          <p><strong>Traps.</strong> Flour burst, pepper furnace vent, slick syrup, sticky sugar floor.</p>
-          <p><strong>Loot.</strong> Feather whisk, cracked sugar crystal, healing broth, rye shield.</p>
-          <p><strong>Heroes.</strong> {HERO_CLASSES.map((hero) => hero.name).join(", ")}.</p>
+          <p><strong>Heroes.</strong> {CHARACTERS.map((hero) => `${hero.className} (${hero.startingItem})`).join(", ")}.</p>
+          <p><strong>Monsters.</strong> {ELEMENTS.flatMap((element) => ELEMENT_MEANING[element].monsters.map((bit) => bit.name)).join(", ")}.</p>
+          <p><strong>Rooms.</strong> {ELEMENTS.flatMap((element) => ELEMENT_MEANING[element].places.map((bit) => bit.name)).join(", ")}.</p>
+          <p><strong>Traps.</strong> {ELEMENTS.flatMap((element) => ELEMENT_MEANING[element].traps.map((bit) => bit.name)).join(", ")}.</p>
+          <p><strong>Loot.</strong> {ELEMENTS.flatMap((element) => ELEMENT_MEANING[element].loot.map((bit) => bit.name)).join(", ")}.</p>
+          <p><strong>NPC / clue.</strong> {ELEMENTS.flatMap((element) => [...ELEMENT_MEANING[element].npcs, ...ELEMENT_MEANING[element].clues].map((bit) => bit.name)).join(", ")}.</p>
           <p className="note">Stats, not a sheet yet: {SAMPLE_STATS.join(", ")}.</p>
         </article>
       </section>
